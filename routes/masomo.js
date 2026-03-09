@@ -2,6 +2,8 @@ const express = require("express")
 
 const router = express.Router()
 
+router.use(enter)
+
 router.get("/", (req,res) => {
     res.send("Masomo ni tamu")
 })
@@ -15,27 +17,27 @@ router.post('/',(req,res) =>{
 })
 
 router
-  .route(":id")
+  .route("/:id")
   .get((req, res) =>{
+    console.log(req.unit)
     res.send(`Get unit with id ${req.params.id}`)
 })
   .put((req, res) =>{
     res.send(`Update unit with id ${req.params.id} `)
 })
 .delete((req, res) =>{
-    res.send(`Delete unit with id ${req.params.id} `)
+    res.send(`Deleted unit with id ${req.params.id} `)
 })
 
-// router.get('/:id', (req, res) =>{
-//     res.send(`Get unit with id ${req.params.id}`)
-// })
+const units = [{unit:"Web design"}, {unit:"Before you"}]
 
-// router.put('/:id', (req, res) =>{
-//     res.send(`Updatei unit with id ${req.params.id} `)
-// })
+router.param("id", (req, res, next, id) =>{
+    req.unit = units[id]
+    next();
+})
 
-// router.delete('/:id', (req, res) =>{
-//     res.send(`Delete unit with id ${req.params.id} `)
-// })
-
+function enter(req,res,next){
+    console.log(req.originalUrl)
+    next()
+}
 module.exports = router
